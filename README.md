@@ -3,7 +3,7 @@ Medicine Cabinet
 
 ## Documentation
 
-Base URL for deployed API: 
+Base URL for deployed API: https://bw-medicine-cabinet.herokuapp.com/
 
 ## **Endpoints**
 
