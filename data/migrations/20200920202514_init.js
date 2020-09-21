@@ -3,10 +3,11 @@ exports.up = function(knex) {
         tbl.increments();
         tbl.string("strain_name").notNullable().unique().index();
         tbl.string("type").notNullable();
-        tbl.string("thc_content").notNullable();
+        tbl.string("thc_content");
         tbl.string("cbd_content");
-        tbl.string("best_time_for_use");
-        tbl.text("more_info");
+        tbl.text("symptoms");
+        tbl.text("effects");
+        tbl.text("description");
       })
       .createTable("users", (tbl) => {
         tbl.increments();
