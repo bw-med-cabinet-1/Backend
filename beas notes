@@ -1,0 +1,21 @@
+exports.up = function(knex) {
+    return knex.schema.createTable("strains", (tbl) => {
+        tbl.increments();
+        tbl.string("Strain Name").notNullable().unique().index();
+        tbl.string("Type").notNullable();
+        tbl.string("THC Content").notNullable();
+        tbl.string("CBD Content");
+        tbl.string("Best Time for Use");
+        tbl.text("More Info");
+      })
+      .createTable("users", (tbl) => {
+        tbl.increments();
+        tbl.string("Username").notNullable().unique().index();
+        tbl.string("Password").notNullable();
+        tbl.boolean("Role").defaultTo(false)
+    });
+};
+
+exports.down = function(knex) {
+    return knex.schema.dropTableIfExists("users").dropTableIfExists("strains");
+};

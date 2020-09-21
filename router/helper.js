@@ -2,7 +2,8 @@ const db = require('../data/db-config');
 
 function find(table) {
   return db(table) 
-}
+};
+
 function add(addedObject, table) { 
   return( 
     db(table) 
@@ -11,10 +12,16 @@ function add(addedObject, table) {
       return findById(id[0], table)
     })
   )
-}
+};
+    
 function findById(id,table) {
   return db(table).where({ id }).first() 
-}
+};
+
+function findBy(filter) {
+  return db("users").where(filter).orderBy("id"); 
+};
+
 function update(changes, id, table) {
   return db(table) 
   .update(changes)
@@ -22,7 +29,8 @@ function update(changes, id, table) {
   .then( () => {
       return findById(id, table)
   })
-}
+};
+
 function remove(id, table) {
   let removed
   findById(id, table).then(rez => removed=rez)
@@ -32,11 +40,13 @@ function remove(id, table) {
     .then(() => {
       return removed
     })
-}
+};
+
 module.exports ={
   find,
-  findById,
   add,
+  findById,
+  findBy,
   update,
   remove
-}
+};

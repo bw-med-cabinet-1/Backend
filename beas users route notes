@@ -1,0 +1,177 @@
+const router = require('express').Router();
+// const bcryptjs = require(bcryptjs);
+
+const helper = require('./users-helper') ;
+
+router.get('/', protected, (req, res) => {
+  helper.find('users')
+  .then(rez => res.status(200).json(rez))
+  .catch(err => res.status(500).json({status: 500, err}))
+})
+router.get('/:id', (req, res) => {
+  const id = req.params.id
+  helper.findById(id, 'users')
+  .then(rez => res.status(200).json(rez))
+  .catch(err => res.status(500).json({status: 500, err}))
+});
+
+router.post("/register", (req, res) => {
+  const userInfo = req.body;
+  const isValid = validateUser(userInfo);
+
+  if (isValid) {
+      const rounds = process.env.BCRYPT_ROUNDS || 4;
+      const hash = bcryptjs.hashSync(userInfo.password, rounds);
+      userInfo.password = hash;
+
+      helper.add(userInfo)
+          .then(inserted => {
+              res.status(201).json({ data: inserted });
+          })
+          .catch(error => {
+              res.status(500).json({ message: error.message });
+          });
+  } else {
+      res.status(400).json({
+          message: "Invalid information, please verify and try again",
+          user: userInfo,
+          valid: isValid,
+      });
+  }
+});
+
+router.post("/login", (req, res) => {
+  const creds = req.body;
+  const isValid = validateCredentials(creds);
+
+  if (isValid) {
+      Users.findBy({ username: creds.username })
+          .then(([user]) => {
+              if (user && bcryptjs.compareSync(creds.password, user.password)) {
+                const token = makeJwt(user);
+                  res.status(200).json({token});
+              } else {
+                  // no user by that username
+                  res.status(401).json({ message: "you cannnot pass!!" });
+              }
+          })
+          .catch(error => {
+              res.status(500).json({ message: error.message });
+          });
+  } else {
+      res.status(400).json({
+          message: "Invalid information, please verify and try again",
+      });
+  }
+});
+
+router.put('/:id', (req, res) => {
+  const id = req.params.id
+  helper.update(req.body, id, 'users')
+  .then(rez => res.status(200).json(rez))
+  .catch(err => res.status(500).json({status: 500, err}))
+});
+
+router.delete('/:id', protected, (req, res) => {
+  const id = req.params.id
+  helper.remove(id, 'users')
+  .then(rez => res.status(200).json(rez))
+  .catch(err => res.status(500).json({status: 500, err}))
+});
+
+function checkRole(role) {
+  return (req, res, next) => {
+    if( req.jwt.role === role){
+      next()
+    }else {
+      res.status(403).json({message: 'You are not authorized'})
+    }
+  }
+};
+
+function validateUser(user) {
+  // has username, password
+  return user.username && user.password ? true : false;
+};
+
+function validateCredentials(user) {
+  // has username, password and role
+  return user.username && user.password ? true : false;
+};
+
+function protected(req, res, next) {
+  if (req.session.username) {
+      next();
+  } else {
+      res.status(401).json({ you: "cannot pass!" });
+  }
+};
+
+module.exports = router;
+
+const db = require('../data/db-config');
+
+function find(users) {
+  return db("users") 
+};
+
+function add(addedObject, users) { 
+  return( 
+    db("users") 
+    .insert(addedObject) 
+    .then( id => {
+      return findById(id[0], "users")
+    })
+  )
+};
+
+function findBy(filter) {
+  return db("users").where(filter).orderBy("id");
+};
+function update(changes, id, users) {
+  return db(users) 
+  .update(changes)
+  .where({ id })
+  .then( () => {
+      return findById(id, users)
+  })
+}
+function remove(id, users) {
+  let removed
+  findById(id, users).then(rez => removed=rez)
+  return db(users) 
+    .where({ id })
+    .del()
+    .then(() => {
+      return removed
+    })
+}
+module.exports ={
+  find,
+  findBy,
+  add,
+  update,
+  remove
+}
+
+
+const jwt = require('jsonwebtoken');
+
+module.exports = (req, res, next) => {
+  const token = req.header.autorization;
+  const secret = process.env.JWT_SECRET || 'is it secret, is it safe?';
+
+  if (token) {
+    jwt.verify(token, secret, (err, decodedToken) => {
+      if (err) {
+        res.status(401).json({ message: "Not Allowed" }); 
+      } else {
+        req.jwt = decodedToken; 
+        next(); 
+      }
+    }); 
+  } else {
+    res.status(401).json({ message: "No token!" }); 
+  }
+};
+
