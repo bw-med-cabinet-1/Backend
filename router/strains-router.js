@@ -22,23 +22,23 @@ router.post('/', (req, res) => {
   .catch(err => res.status(500).json({status: 500, err}))
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', checkRole(), (req, res) => {
   const id = req.params.id
   helper.update(req.body, id, 'strains')
   .then(rez => res.status(200).json({message:'strain successfully updated', rez}))
   .catch(err => res.status(500).json({status: 500, err}))
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', checkRole(), (req, res) => {
   const id = req.params.id
   helper.remove(id, 'strains')
   .then(rez => res.status(200).json({message:'this strain was successfully deleted', rez}))
   .catch(err => res.status(500).json({status: 500, err}))
 });
 
-function checkRole(role) {
+function checkRole() {
   return (req, res, next) => {
-    if (req.jwt.role === role) {
+    if (req.jwt.role === true) {
       next();
     } else {
       res.status(403).json({ message: 'You are not authorized' });
