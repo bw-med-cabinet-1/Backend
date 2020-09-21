@@ -30,7 +30,7 @@ Base URL for deployed API:
 
 Note: you must be registered and logged in to access the strains list/database
 
-# **How-Tos**
+# **Strains**
 
 | Name | Type | Required | Unique | Notes |
 |------|------|----------|--------|-------|
