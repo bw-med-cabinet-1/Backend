@@ -20,14 +20,14 @@ router.post("/register", (req, res) => {
     .then(user => {
       const token = makeJwt(user)
 
-      res.status(201).json({ message:'user successfulled registered', data: user, token })
+      res.status(201).json({ message:'User successfully registered', data: user, token })
     })
     .catch(error => {
       res.status(500).json({ message: error.message })
     })
   } else {
     res.status(400).json({
-      message: "please provide username and password and the password shoud be alphanumeric",
+      message: "Please provide username and password",
     })
   }
 });
@@ -52,7 +52,7 @@ router.post("/login", (req, res) => {
     })
   } else {
     res.status(400).json({
-      message: "please provide username and password and the password shoud be alphanumeric",
+      message: "Please provide username and password and the password shoud be alphanumeric",
     })
   }
 });
