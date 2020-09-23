@@ -1,13 +1,13 @@
 exports.up = function(knex) {
     return knex.schema.createTable("strains", (tbl) => {
         tbl.increments();
-        tbl.string("strain_name").notNullable().unique().index();
+        tbl.string("strain_id");
+        tbl.string("strain").notNullable().unique().index();
         tbl.string("type").notNullable();
-        tbl.string("thc_content");
-        tbl.string("cbd_content");
-        tbl.text("symptoms");
-        tbl.text("effects");
-        tbl.text("description");
+        tbl.integer("rating").notNullable();
+        tbl.text("effects").notNullable();
+        tbl.text("flavors").notNullable();
+        tbl.text("description").notNullable();
       })
       .createTable("users", (tbl) => {
         tbl.increments();
