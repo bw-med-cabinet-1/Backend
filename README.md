@@ -65,7 +65,7 @@ Request body:
 Returns:
 ```
 {
-    "message": "user successfulled registered",
+    "message": "user successfully registered",
     "data": {
         "id": 4,
         "username": "bea",
