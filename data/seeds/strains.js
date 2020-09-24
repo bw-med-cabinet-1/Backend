@@ -50,6 +50,42 @@ exports.seed = function(knex) {
           flavors:"citrus, earthy, orange",
           description:"Also known as Kosher Tangie, 24k Gold is a 60% indica-dominant hybrid that combines the legendary LA strain Kosher Kush with champion sativa Tangie to create something quite unique. Growing tall in its vegetative cycle and very stretchy in flower, this one will need an experienced hand when grown indoors. Most phenotypes will exhibit a sweet orange aroma from the Tangie along with the dark coloration of the Kosher Kush, and will offer a strong citrus flavor when smoked or vaped. THC levels range from 18% to 24%; definitely not for novice users!",
         },
+        {
+          id: 6, 
+          strain: "guptilla", 
+          type: "hybrid", 
+          rating: 5.0,
+          effects:"happy, relaxed, euphoric, focused, sleepy",
+          flavors:"grape, pepper, orange",
+          description:"guptilla is a potent indica-dominant cross bred",
+        },
+        {
+          id: 7, 
+          strain: "bad-azz-kush", 
+          type: "hybrid", 
+          rating: 5.0,
+          effects:"N/A",
+          flavors:"N/A",
+          description:"bad azz kush by barney’s farm",
+        },
+        {
+          id: 8, 
+          strain: "cbd-rich-blessing", 
+          type: "sativa", 
+          rating: 5.0,
+          effects:"5.0	aroused, uplifted, focused, happy, relaxed",
+          flavors:"N/A",
+          description:"cbd rich blessing by bodhi seeds is a 2:1 thc/cbd",
+        },
+        {
+          id: 9, 
+          strain: "cbd-ox", 
+          type: "indica", 
+          rating: 5.0,
+          effects:"aroused, sleepy, happy, euphoric, hungry",
+          flavors:"sweet, berry, flowery",
+          description:"cbd ox by rare dankness is a 1:1 cbd/thc strain",
+        },
       ]);
     });
 };
